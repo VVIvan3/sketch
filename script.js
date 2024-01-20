@@ -22,15 +22,18 @@ function getGridNumber() {
 modeBtns.forEach((modeBtn) => {
     modeBtn.addEventListener('click', (event) => {
         switch (event.target.id) {
+            case 'none':
+                currentMode = 0;
+                break
             case 'normalMode':
                 currentMode = 1;
                 break;
             case 'randomMode':
                 currentMode = 2;
                 break;
-            case 'none':
-                currentMode = 0;
-                break
+            case 'darkMode':
+                currentMode = 3;
+                break;
         }
     });
 });
@@ -41,14 +44,20 @@ function generateGrid(number) {
         container.setAttribute('class', 'gridContainer');
         for (let n = 1; n <= number; n++) {
             const box = document.createElement('div');
+            box.setAttribute('class', 'gridBox');
             box.addEventListener('mouseover', () => {
                 if (currentMode === 1) {
                     box.style.backgroundColor = 'rgb(255, 255, 255)';
                 } else if (currentMode === 2) {
                     box.style.backgroundColor = `rgb(${random()}, ${random()}, ${random()})`
+                } else if (currentMode === 3) {
+                    const color = window.getComputedStyle(box).backgroundColor;
+                    const redValue = color.split(',')[0].slice(4);
+                    const greenValue = color.split(',')[1];
+                    const blueValue = color.split(',')[2].slice(0, -1);
+                    box.style.backgroundColor = `rgb(${redValue-10}, ${greenValue-5}, ${blueValue-5})`;
                 }
             });
-            box.setAttribute('class', 'gridBox');
             container.appendChild(box);
         }
         sketchBox.appendChild(container);
